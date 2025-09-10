@@ -49,6 +49,14 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputAction* MouseLookAction;
 
+	/** Mouse Look Input Action */
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* RollAction;
+
+	/** Mouse Look Input Action */
+	UPROPERTY(EditAnywhere, Category="Animation")
+	UAnimMontage* RollAnimMontage;
+
 public:
 
 	/** Constructor */
@@ -66,6 +74,11 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
+
+	/** Called for rolling input */
+	void Roll(const FInputActionValue& Value);
+
+	void SoulsJump(const FInputActionValue& Value);
 
 public:
 

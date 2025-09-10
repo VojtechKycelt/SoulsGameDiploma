@@ -10,6 +10,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "SoulsCharacterAnimInstance.h"
 #include "SoulsGameDiploma.h"
 
 ASoulsGameDiplomaCharacter::ASoulsGameDiplomaCharacter()
@@ -56,15 +57,19 @@ void ASoulsGameDiplomaCharacter::SetupPlayerInputComponent(UInputComponent* Play
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
 		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
-
+		// EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
+		// EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ASoulsGameDiplomaCharacter::SoulsJump);
+		
 		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ASoulsGameDiplomaCharacter::Move);
 		EnhancedInputComponent->BindAction(MouseLookAction, ETriggerEvent::Triggered, this, &ASoulsGameDiplomaCharacter::Look);
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ASoulsGameDiplomaCharacter::Look);
+
+		//Rolling
+		EnhancedInputComponent->BindAction(RollAction, ETriggerEvent::Triggered, this, &ASoulsGameDiplomaCharacter::Roll);
 	}
 	else
 	{
@@ -88,6 +93,30 @@ void ASoulsGameDiplomaCharacter::Look(const FInputActionValue& Value)
 
 	// route the input
 	DoLook(LookAxisVector.X, -LookAxisVector.Y);
+}
+
+void ASoulsGameDiplomaCharacter::Roll(const FInputActionValue& Value)
+{
+	if (USoulsCharacterAnimInstance* AnimInstance = Cast<USoulsCharacterAnimInstance>(GetMesh()->GetAnimInstance()))
+	{
+		if (!AnimInstance->isRolling && !GetCharacterMovement()->IsFalling())
+		{
+			PlayAnimMontage(RollAnimMontage);
+			//AnimInstance->isRolling = true;
+		}
+	}
+}
+
+
+void ASoulsGameDiplomaCharacter::SoulsJump(const FInputActionValue& Value)
+{
+	if (USoulsCharacterAnimInstance* AnimInstance = Cast<USoulsCharacterAnimInstance>(GetMesh()->GetAnimInstance()))
+	{
+		if (!AnimInstance->isRolling)
+		{
+			Jump();
+		}
+	}
 }
 
 void ASoulsGameDiplomaCharacter::DoMove(float Right, float Forward)
