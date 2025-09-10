@@ -87,7 +87,7 @@ void ASoulsGameDiplomaCharacter::Look(const FInputActionValue& Value)
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
 
 	// route the input
-	DoLook(LookAxisVector.X, LookAxisVector.Y);
+	DoLook(LookAxisVector.X, -LookAxisVector.Y);
 }
 
 void ASoulsGameDiplomaCharacter::DoMove(float Right, float Forward)
