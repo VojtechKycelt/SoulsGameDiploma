@@ -10,7 +10,6 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
-#include "SoulsCharacterAnimInstance.h"
 #include "SoulsGameDiploma.h"
 
 ASoulsGameDiplomaCharacter::ASoulsGameDiplomaCharacter()
@@ -46,9 +45,17 @@ ASoulsGameDiplomaCharacter::ASoulsGameDiplomaCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
+	
+}
 
-	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
-	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+void ASoulsGameDiplomaCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	AnimInstance = Cast<USoulsCharacterAnimInstance>(GetMesh()->GetAnimInstance());
+	if (!AnimInstance)
+	{
+		UE_LOG(LogSoulsGameDiploma, Error, TEXT("AnimInstance is null"));
+	}
 }
 
 void ASoulsGameDiplomaCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -99,49 +106,49 @@ void ASoulsGameDiplomaCharacter::Look(const FInputActionValue& Value)
 	DoLook(LookAxisVector.X, -LookAxisVector.Y);
 }
 
+bool ASoulsGameDiplomaCharacter::CanPerformAction()
+{
+	if (!AnimInstance) return false;
+	if (AnimInstance->isRolling || AnimInstance->isAttacking || GetCharacterMovement()->IsFalling()) return false;
+	return true;
+}
+
+
+
 void ASoulsGameDiplomaCharacter::Roll(const FInputActionValue& Value)
 {
-	if (USoulsCharacterAnimInstance* AnimInstance = Cast<USoulsCharacterAnimInstance>(GetMesh()->GetAnimInstance()))
+	if (CanPerformAction())
 	{
-		if (!AnimInstance->isRolling && !GetCharacterMovement()->IsFalling())
-		{
-			PlayAnimMontage(RollAnimMontage);
-			//AnimInstance->isRolling = true;
-		}
-	}
+		AnimInstance->Montage_Play(RollAnimMontage);
+		//PlayAnimMontage(RollAnimMontage);
+	} 
 }
 
 void ASoulsGameDiplomaCharacter::LightAttack(const FInputActionValue& Value)
 {
-	if (USoulsCharacterAnimInstance* AnimInstance = Cast<USoulsCharacterAnimInstance>(GetMesh()->GetAnimInstance()))
+	if (CanPerformAction())
 	{
-		if (!AnimInstance->isRolling && !GetCharacterMovement()->IsFalling())
-		{
-			PlayAnimMontage(LightAttackAnimMontage);
-		}
-	}
+		AnimInstance->Montage_Play(LightAttackAnimMontage);
+		//PlayAnimMontage(LightAttackAnimMontage);
+	} 
+	
 }
 
 void ASoulsGameDiplomaCharacter::HeavyAttack(const FInputActionValue& Value)
 {
-	if (USoulsCharacterAnimInstance* AnimInstance = Cast<USoulsCharacterAnimInstance>(GetMesh()->GetAnimInstance()))
+	if (CanPerformAction())
 	{
-		if (!AnimInstance->isRolling && !GetCharacterMovement()->IsFalling())
-		{
-			PlayAnimMontage(HeavyAttackAnimMontage);
-		}
-	}
+		AnimInstance->Montage_Play(HeavyAttackAnimMontage);
+		//PlayAnimMontage(HeavyAttackAnimMontage);
+	} 
 }
 
 
 void ASoulsGameDiplomaCharacter::SoulsJump(const FInputActionValue& Value)
 {
-	if (USoulsCharacterAnimInstance* AnimInstance = Cast<USoulsCharacterAnimInstance>(GetMesh()->GetAnimInstance()))
+	if (CanPerformAction())
 	{
-		if (!AnimInstance->isRolling)
-		{
-			Jump();
-		}
+		Jump();
 	}
 }
 

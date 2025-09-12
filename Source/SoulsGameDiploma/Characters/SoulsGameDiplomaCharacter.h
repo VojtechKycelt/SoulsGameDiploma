@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "SoulsCharacterAnimInstance.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "SoulsGameDiplomaCharacter.generated.h"
@@ -14,10 +15,6 @@ struct FInputActionValue;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
-/**
- *  A simple player-controllable third person character
- *  Implements a controllable orbiting camera
- */
 UCLASS(abstract)
 class ASoulsGameDiplomaCharacter : public ACharacter
 {
@@ -33,53 +30,41 @@ class ASoulsGameDiplomaCharacter : public ACharacter
 	
 protected:
 
-	/** Jump Input Action */
+	/** Input Actions for binding to correct functions */
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputAction* JumpAction;
-
-	/** Move Input Action */
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputAction* MoveAction;
-
-	/** Look Input Action */
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputAction* LookAction;
-
-	/** Mouse Look Input Action */
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputAction* MouseLookAction;
-
-	/** Mouse Look Input Action */
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputAction* RollAction;
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* LightAttackAction;
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* HeavyAttackAction;
 
-	/** Animation Montages */
+	
+	/** Animation Montages to easily and correctly assign animation to correct action **/
 	UPROPERTY(EditAnywhere, Category="Animation")
 	UAnimMontage* RollAnimMontage;
 	UPROPERTY(EditAnywhere, Category="Animation")
 	UAnimMontage* LightAttackAnimMontage;
 	UPROPERTY(EditAnywhere, Category="Animation")
 	UAnimMontage* HeavyAttackAnimMontage;
+
+	USoulsCharacterAnimInstance* AnimInstance;
+
+	bool CanPerformAction();
+
+	virtual void BeginPlay() override;
 	
-
-	/** Attack Input Action */
-	UPROPERTY(EditAnywhere, Category="Input")
-	UInputAction* LightAttackAction;
-	UPROPERTY(EditAnywhere, Category="Input")
-	UInputAction* HeavyAttackAction;
-
-public:
-
-	/** Constructor */
-	ASoulsGameDiplomaCharacter();	
-
-protected:
-
 	/** Initialize input action bindings */
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-protected:
-
+	
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);
 
@@ -98,24 +83,25 @@ protected:
 
 public:
 
+	/** Constructor */
+	ASoulsGameDiplomaCharacter();	
+	
 	/** Handles move inputs from either controls or UI interfaces */
 	UFUNCTION(BlueprintCallable, Category="Input")
 	virtual void DoMove(float Right, float Forward);
-
+	
 	/** Handles look inputs from either controls or UI interfaces */
 	UFUNCTION(BlueprintCallable, Category="Input")
 	virtual void DoLook(float Yaw, float Pitch);
-
+	
 	/** Handles jump pressed inputs from either controls or UI interfaces */
 	UFUNCTION(BlueprintCallable, Category="Input")
 	virtual void DoJumpStart();
-
+	
 	/** Handles jump pressed inputs from either controls or UI interfaces */
 	UFUNCTION(BlueprintCallable, Category="Input")
 	virtual void DoJumpEnd();
-
-public:
-
+	
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 

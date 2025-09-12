@@ -21,4 +21,11 @@ class SOULSGAMEDIPLOMA_API USoulsCharacterAnimInstance : public UAnimInstance
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Character State")
 	bool isAttacking;
+	
+	// UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Character State")
+	// bool isJumping;
+
+	// Recovering after getting hit
+	// UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Character State")
+	// bool isRecovering; 
 };

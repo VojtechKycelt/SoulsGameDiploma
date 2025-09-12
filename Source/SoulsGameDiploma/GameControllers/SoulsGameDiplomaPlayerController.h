@@ -9,7 +9,7 @@
 class UInputMappingContext;
 
 /**
- *  Basic PlayerController class for a third person game
+ *  PlayerController class for a souls game
  *  Manages input mappings
  */
 UCLASS(abstract)

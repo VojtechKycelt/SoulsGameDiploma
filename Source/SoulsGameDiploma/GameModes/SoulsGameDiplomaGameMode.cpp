@@ -4,5 +4,5 @@
 
 ASoulsGameDiplomaGameMode::ASoulsGameDiplomaGameMode()
 {
-	// stub
+	
 }

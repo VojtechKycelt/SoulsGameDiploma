@@ -45,7 +45,7 @@ void ASoulsGameDiplomaPlayerController::Pause()
 	//Super::Pause();
 	UE_LOG(LogTemp, Warning, TEXT("SoulsGameDiplomaPlayerController : Pause function"));
 
-	// if (ASoulsHUD* HUD = Cast<ASoulssHUD>(GetHUD()))
+	// if (ASoulsHUD* HUD = Cast<ASoulsHUD>(GetHUD()))
 	// {
 	// 	HUD->PauseMenu();
 	// }
