@@ -70,6 +70,10 @@ void ASoulsGameDiplomaCharacter::SetupPlayerInputComponent(UInputComponent* Play
 
 		//Rolling
 		EnhancedInputComponent->BindAction(RollAction, ETriggerEvent::Triggered, this, &ASoulsGameDiplomaCharacter::Roll);
+
+		//Attacks
+		EnhancedInputComponent->BindAction(LightAttackAction, ETriggerEvent::Triggered, this, &ASoulsGameDiplomaCharacter::LightAttack);
+		EnhancedInputComponent->BindAction(HeavyAttackAction, ETriggerEvent::Triggered, this, &ASoulsGameDiplomaCharacter::HeavyAttack);
 	}
 	else
 	{
@@ -103,6 +107,28 @@ void ASoulsGameDiplomaCharacter::Roll(const FInputActionValue& Value)
 		{
 			PlayAnimMontage(RollAnimMontage);
 			//AnimInstance->isRolling = true;
+		}
+	}
+}
+
+void ASoulsGameDiplomaCharacter::LightAttack(const FInputActionValue& Value)
+{
+	if (USoulsCharacterAnimInstance* AnimInstance = Cast<USoulsCharacterAnimInstance>(GetMesh()->GetAnimInstance()))
+	{
+		if (!AnimInstance->isRolling && !GetCharacterMovement()->IsFalling())
+		{
+			PlayAnimMontage(LightAttackAnimMontage);
+		}
+	}
+}
+
+void ASoulsGameDiplomaCharacter::HeavyAttack(const FInputActionValue& Value)
+{
+	if (USoulsCharacterAnimInstance* AnimInstance = Cast<USoulsCharacterAnimInstance>(GetMesh()->GetAnimInstance()))
+	{
+		if (!AnimInstance->isRolling && !GetCharacterMovement()->IsFalling())
+		{
+			PlayAnimMontage(HeavyAttackAnimMontage);
 		}
 	}
 }

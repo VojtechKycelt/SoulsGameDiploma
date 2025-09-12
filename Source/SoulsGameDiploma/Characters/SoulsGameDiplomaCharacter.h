@@ -53,9 +53,20 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Input")
 	UInputAction* RollAction;
 
-	/** Mouse Look Input Action */
+	/** Animation Montages */
 	UPROPERTY(EditAnywhere, Category="Animation")
 	UAnimMontage* RollAnimMontage;
+	UPROPERTY(EditAnywhere, Category="Animation")
+	UAnimMontage* LightAttackAnimMontage;
+	UPROPERTY(EditAnywhere, Category="Animation")
+	UAnimMontage* HeavyAttackAnimMontage;
+	
+
+	/** Attack Input Action */
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* LightAttackAction;
+	UPROPERTY(EditAnywhere, Category="Input")
+	UInputAction* HeavyAttackAction;
 
 public:
 
@@ -78,6 +89,11 @@ protected:
 	/** Called for rolling input */
 	void Roll(const FInputActionValue& Value);
 
+	/** Called for attacking inputs */
+	void LightAttack(const FInputActionValue& Value);
+	void HeavyAttack(const FInputActionValue& Value);
+
+	/** Wrapper function for Jump to decline jump if there is conditions preventing it (like rolling) */
 	void SoulsJump(const FInputActionValue& Value);
 
 public:

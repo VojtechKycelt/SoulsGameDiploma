@@ -15,6 +15,10 @@ class SOULSGAMEDIPLOMA_API USoulsCharacterAnimInstance : public UAnimInstance
 	GENERATED_BODY()
 
 	public:
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Character State")
 	bool isRolling;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Character State")
+	bool isAttacking;
 };
