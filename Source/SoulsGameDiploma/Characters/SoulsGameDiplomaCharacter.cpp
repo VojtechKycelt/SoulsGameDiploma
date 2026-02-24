@@ -109,7 +109,7 @@ void ASoulsGameDiplomaCharacter::Look(const FInputActionValue& Value)
 bool ASoulsGameDiplomaCharacter::CanPerformAction()
 {
 	if (!AnimInstance) return false;
-	if (AnimInstance->isRolling || AnimInstance->isAttacking || GetCharacterMovement()->IsFalling()) return false;
+	if (AnimInstance->isRolling || AnimInstance->isAnimating || GetCharacterMovement()->IsFalling()) return false;
 	return true;
 }
 

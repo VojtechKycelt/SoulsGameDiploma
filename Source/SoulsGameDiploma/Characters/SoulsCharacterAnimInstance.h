@@ -21,6 +21,9 @@ class SOULSGAMEDIPLOMA_API USoulsCharacterAnimInstance : public UAnimInstance
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Character State")
 	bool isAttacking;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Character State")
+	bool isAnimating;
 	
 	// UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Character State")
 	// bool isJumping;
