@@ -16,7 +16,7 @@ ASoulsGameDiplomaCharacter::ASoulsGameDiplomaCharacter()
 {
 	// Set size for collision capsule
 	GetCapsuleComponent()->InitCapsuleSize(42.f, 96.0f);
-		
+
 	// Don't rotate when the controller rotates. Let that just affect the camera.
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = false;
@@ -45,7 +45,7 @@ ASoulsGameDiplomaCharacter::ASoulsGameDiplomaCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 	FollowCamera->bUsePawnControlRotation = false;
-	
+
 }
 
 void ASoulsGameDiplomaCharacter::BeginPlay()
@@ -62,12 +62,12 @@ void ASoulsGameDiplomaCharacter::SetupPlayerInputComponent(UInputComponent* Play
 {
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
-		
+
 		// Jumping
 		// EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
 		// EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ASoulsGameDiplomaCharacter::SoulsJump);
-		
+
 		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ASoulsGameDiplomaCharacter::Move);
 		EnhancedInputComponent->BindAction(MouseLookAction, ETriggerEvent::Triggered, this, &ASoulsGameDiplomaCharacter::Look);
@@ -121,7 +121,7 @@ void ASoulsGameDiplomaCharacter::Roll(const FInputActionValue& Value)
 	{
 		AnimInstance->Montage_Play(RollAnimMontage);
 		//PlayAnimMontage(RollAnimMontage);
-	} 
+	}
 }
 
 void ASoulsGameDiplomaCharacter::LightAttack(const FInputActionValue& Value)
@@ -130,8 +130,8 @@ void ASoulsGameDiplomaCharacter::LightAttack(const FInputActionValue& Value)
 	{
 		AnimInstance->Montage_Play(LightAttackAnimMontage);
 		//PlayAnimMontage(LightAttackAnimMontage);
-	} 
-	
+	}
+
 }
 
 void ASoulsGameDiplomaCharacter::HeavyAttack(const FInputActionValue& Value)
@@ -140,7 +140,7 @@ void ASoulsGameDiplomaCharacter::HeavyAttack(const FInputActionValue& Value)
 	{
 		AnimInstance->Montage_Play(HeavyAttackAnimMontage);
 		//PlayAnimMontage(HeavyAttackAnimMontage);
-	} 
+	}
 }
 
 
@@ -163,10 +163,10 @@ void ASoulsGameDiplomaCharacter::DoMove(float Right, float Forward)
 		// get forward vector
 		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 
-		// get right vector 
+		// get right vector
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 
-		// add movement 
+		// add movement
 		AddMovementInput(ForwardDirection, Forward);
 		AddMovementInput(RightDirection, Right);
 	}
