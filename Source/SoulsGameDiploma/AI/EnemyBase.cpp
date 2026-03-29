@@ -5,6 +5,7 @@
 #include "AI/BaseAIController.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "CombatAIController.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AEnemyBase::AEnemyBase()
@@ -46,25 +47,52 @@ void AEnemyBase::Tick(float DeltaTime)
 	
 	//UE_LOG(LogTemp, Warning, TEXT("Tick is running! DeltaTime: %f"), DeltaTime);
 
+	AActor* Player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+	if (!Player) return;
+
+	//TODO why not use this tick instead of Evaluators tick? We need to trigger transitions manually anyways
+
+	float Distance = FVector::Dist(GetActorLocation(), Player->GetActorLocation());
+	if (Distance <= ChaseRadius)
+	{
+		//SelectedGoal = EGoalCommon::CHASE;
+	}
 }
 
+bool AEnemyBase::HandleGoalSelection()
+{
+	AActor* Player = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+	if (!Player) {
+		return false;
+	}
+
+	float Distance = FVector::Dist(GetActorLocation(), Player->GetActorLocation());
+	if (Distance > ChaseRadius)
+	{
+		SelectedGoal = EGoalCommon::IDLE;
+	}
+
+	if (Distance <= ChaseRadius && Distance > AttackRadius)
+	{
+		SelectedGoal = EGoalCommon::CHASE;
+	}
+
+	if (Distance < AttackRadius)
+	{
+		SelectedGoal = EGoalCommon::ATTACK;
+	}
+	return true;
+}
+
+//TODO Change Names to HandleIdleTask or move it completely to STT_Idle cpp file or smth
 void AEnemyBase::HandleIdleGoal()
 {
-	// Compute probabilities for each action applicable to the IDLE goal
-
-	// Spin the probability wheel to select an action
-
-	UE_LOG(LogTemp, Warning, TEXT("Idle!"));
+	UE_LOG(LogTemp, Warning, TEXT("[EnemyBase.cpp] Idle! Distance: %.1f"));
 }
 
+//TODO rename to STT_ChaseTask
 void AEnemyBase::HandleChaseGoal()
 {
-	//UE_LOG(LogTemp, Warning, TEXT("Handling CHASE goal!"));
-	auto* MoveComp = GetCharacterMovement();
-	UE_LOG(LogTemp, Warning, TEXT("Chase!"));
-
-	UE_LOG(LogTemp, Warning, TEXT("MaxWalkSpeed: %f"), MoveComp->MaxWalkSpeed);
-	UE_LOG(LogTemp, Warning, TEXT("Velocity Size: %f"), GetVelocity().Size());
-	UE_LOG(LogTemp, Warning, TEXT("GetMaxSpeed(): %f"), MoveComp->GetMaxSpeed());
+	UE_LOG(LogTemp, Warning, TEXT("[EnemyBase.cpp] Chase!"));
 }
 

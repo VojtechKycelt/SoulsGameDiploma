@@ -24,6 +24,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	// Check if current goal is still valid and choose new one if not.
+	virtual bool HandleGoalSelection();
+
 	// Goals Handlers
 	UFUNCTION(BlueprintCallable, Category = "AI")
 	virtual void HandleIdleGoal();
@@ -64,7 +67,7 @@ public:
 
 	// Base amount of Fire resistance the character has, used for receiving fire damage calculations in combat
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "AI")
-	float AttackRadius = 300.0f;
+	float AttackRadius = 200.0f;
 
 
 protected:
